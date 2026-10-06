@@ -1,7 +1,7 @@
-conf-dump
-ls -l "my dir"
-cd /home
+ls
+ls chchchcchchch
+ls chchch dtdtdtdt
 cd
-cd lkjhgfd
-cd lkjhgf kjhgf
-ls cd cdccdcdcdcdcdc
+cd fofofo
+cd fofofo tututu
+conf-dump

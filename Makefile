@@ -1,36 +1,27 @@
 PYTHON := python3
 MAIN   := ./src/main.py
-VFS    := ./vfs/example.json
+VFS    := ./tests
 LOG    := ./tests/logs
 SCRIPT := ./tests
 
-.PHONY: all run vfs log script all-args log-script-fail script-fail script-ok clean
+.PHONY: all run vfs_minimal vfs_multi vfs_deep vfs_nesushestvuet clean
 
 all: run
 
 run:
 	$(PYTHON) $(MAIN)
 
-vfs:
-	$(PYTHON) $(MAIN) --vfs-path $(VFS)
+vfs_minimal:
+	$(PYTHON) $(MAIN) --vfs-path $(VFS)/vfs_minimal.json --log-file $(LOG)/minimal.csv --script $(SCRIPT)/ok.txt
 
-log:
-	$(PYTHON) $(MAIN) --log-file $(LOG)/log_only.csv
+vfs_multi:
+	$(PYTHON) $(MAIN) --vfs-path $(VFS)/vfs_multi.json --log-file $(LOG)/multi.csv --script $(SCRIPT)/ok.txt
 
-script:
-	$(PYTHON) $(MAIN) --script $(SCRIPT)/ok.txt
+vfs_deep:
+	$(PYTHON) $(MAIN) --vfs-path $(VFS)/vfs_deep.json --log-file $(LOG)/deep.csv --script $(SCRIPT)/ok.txt
 
-all-args:
-	$(PYTHON) $(MAIN) --vfs-path $(VFS) --log-file $(LOG)/all.csv --script $(SCRIPT)/ok.txt
-
-log-script-fail:
-	$(PYTHON) $(MAIN) --log-file $(LOG)/fail.csv --script $(SCRIPT)/fail.txt
-
-script-fail:
-	$(PYTHON) $(MAIN) --log-file $(LOG)/fail.csv --script $(SCRIPT)/no_such_script.txt
-
-script-ok:
-    $(PYTHON) $(MAIN) --log-file $(LOG)/new_dir/log.csv --script $(SCRIPT)/ok.txt
+vfs_nesushestvuet:
+	$(PYTHON) $(MAIN) --vfs-path $(VFS)/vfs_nesushestvuet.json --log-file $(LOG)/fail.csv --script .$(SCRIPT)/ok.txt
 
 clean:
 	rm -rf logs
