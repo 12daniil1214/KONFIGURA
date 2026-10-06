@@ -12,13 +12,13 @@ run:
 	$(PYTHON) $(MAIN)
 
 vfs_minimal:
-	$(PYTHON) $(MAIN) --vfs-path $(VFS)/vfs_minimal.json --log-file $(LOG)/minimal.csv --script $(SCRIPT)/ok.txt
+	$(PYTHON) $(MAIN) --vfs-path $(VFS)/vfs_minimal.json --log-file $(LOG)/minimal.csv --script $(SCRIPT)/minimal.txt
 
 vfs_multi:
-	$(PYTHON) $(MAIN) --vfs-path $(VFS)/vfs_multi.json --log-file $(LOG)/multi.csv --script $(SCRIPT)/ok.txt
+	$(PYTHON) $(MAIN) --vfs-path $(VFS)/vfs_multi.json --log-file $(LOG)/multi.csv --script $(SCRIPT)/multi.txt
 
 vfs_deep:
-	$(PYTHON) $(MAIN) --vfs-path $(VFS)/vfs_deep.json --log-file $(LOG)/deep.csv --script $(SCRIPT)/ok.txt
+	$(PYTHON) $(MAIN) --vfs-path $(VFS)/vfs_deep.json --log-file $(LOG)/deep.csv --script $(SCRIPT)/deep.txt
 
 vfs_nesushestvuet:
 	$(PYTHON) $(MAIN) --vfs-path $(VFS)/vfs_nesushestvuet.json --log-file $(LOG)/fail.csv --script .$(SCRIPT)/ok.txt
