@@ -226,6 +226,35 @@ def cmd_rm(args, config, output):
     return status
 
 
+def _split_path(target):
+    """Разбирает путь на родителя и имя последнего компонента.
+
+    Args:
+        target (str): Путь к узлу.
+
+    Returns:
+        tuple[str, str]: Путь родителя и имя узла.
+    """
+    parts = [p for p in target.split("/") if p]
+    name = parts[-1]
+    parent = "/".join(parts[:-1]) if len(parts) > 1 else "."
+    if target.startswith("/"):
+        parent = "/" + parent if parent != "." else "/"
+    return parent, name
+
+
+def _resolve_parent(vfs, parent_path):
+    """Возвращает узел-родитель по пути. Кидает ValueError."""
+    if parent_path == "/":
+        return vfs["root"]
+    if parent_path == ".":
+        node = vfs["root"]
+        for p in vfs["cwd"]:
+            node = node["children"][p]
+        return node
+    return vfs_node(vfs, parent_path)
+
+
 def _rm_path(vfs, target, recursive, output):
     """Удаляет один путь. Возвращает True при успехе.
 
@@ -241,18 +270,9 @@ def _rm_path(vfs, target, recursive, output):
     if target in RM_FORBIDDEN or target.endswith("/"):
         output(f"rm: {target}: нельзя удалить")
         return False
-    parts = [p for p in target.split("/") if p]
-    name = parts[-1]
-    parent_path = "/".join(parts[:-1]) if len(parts) > 1 else "."
-    if target.startswith("/"):
-        parent_path = "/" + parent_path if parent_path != "." else "/"
+    parent_path, name = _split_path(target)
     try:
-        if parent_path in (".", "/"):
-            parent = vfs["root"]
-            for p in ([] if parent_path == "/" else vfs["cwd"]):
-                parent = parent["children"][p]
-        else:
-            parent = vfs_node(vfs, parent_path)
+        parent = _resolve_parent(vfs, parent_path)
     except ValueError as err:
         output(f"rm: {err}")
         return False
@@ -421,8 +441,6 @@ def load_vfs(path, output):
     Returns:
         dict | None: Словарь VFS при успехе, иначе None.
     """
-
-    """Читает JSON-файл VFS в память. Возвращает словарь или None."""
     if not path:
         return None
     try:
